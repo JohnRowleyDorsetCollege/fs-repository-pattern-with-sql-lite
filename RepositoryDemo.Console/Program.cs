@@ -9,11 +9,41 @@ Console.WriteLine("Hello, World!");
 SQLitePCL.Batteries_V2.Init();
 
 var options = new DbContextOptionsBuilder<AppDbContext>()
-           .UseSqlite("Data Source=c:/sqlite/students2025-02-04.db")
+           .UseSqlite("Data Source=c:/sqlite/students-books-2025-02-04.db")
 .Options;
 
 using var context = new AppDbContext(options);
 var _studentRepository = new StudentRepository(context);
+
+
+
+// Seed Data
+var library = new Library { Name = "City Library" };
+var author1 = new Author { Name = "Author One" };
+var author2 = new Author { Name = "Author Two" };
+
+var book1 = new Book { Title = "Book A", Library = library, Authors = new List<Author> { author1 } };
+var book2 = new Book { Title = "Book B", Library = library, Authors = new List<Author> { author1, author2 } };
+
+context.Libraries.Add(library);
+context.Authors.AddRange(author1, author2);
+context.Books.AddRange(book1, book2);
+context.SaveChanges();
+
+
+// Query Data
+var libraries = context.Libraries.Include(l => l.Books).ThenInclude(b => b.Authors).ToList();
+foreach (var lib in libraries)
+{
+    Console.WriteLine($"Library: {lib.Name}");
+    foreach (var book in lib.Books)
+    {
+        Console.WriteLine($"  Book: {book.Title}");
+        Console.WriteLine($"    Authors: {string.Join(", ", book.Authors.Select(a => a.Name))}");
+    }
+}
+
+return;
 
 //var student1 = new Student { Name = "Bruce", Age = 45 };
 //var student2 = new Student { Name = "Michael", Age =54 };
