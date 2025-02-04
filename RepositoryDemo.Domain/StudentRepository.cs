@@ -34,11 +34,61 @@ namespace RepositoryDemo.Domain
             Console.WriteLine($"Added: {student.Name}, Age: {student.Age}");
         }
 
+        public Student? GetStudentById(int id)
+        {
+            return _context.Students.FirstOrDefault(s=>s.Id==id);
+        }   
+
         public IEnumerable<Student> GetAll()
         {
             return _context.Students.ToList();
         }
 
+        public void Update(Student student)
+        {
+            _context.Students.Update(student);
+            _context.SaveChanges();
+            Console.WriteLine($"Updated: {student.Name}, Age: {student.Age}");
+        }
+
+        public void Update(int id, string newName, int newAge)
+        {
+            var student = _context.Students.FirstOrDefault(s => s.Id == id);
+            if (student is not null)
+            {
+                student.Name = newName;
+                student.Age = newAge;
+              
+                _context.SaveChanges();
+                Console.WriteLine($"Updated: {student.Name}, Age: {student.Age}");
+            } else
+            {
+                Console.WriteLine("Student not found");
+            }
+         
+        }
+
+        public void DeleteStudent(int id)
+        {
+            var student = _context.Students.FirstOrDefault(s => s.Id == id);
+            if (student != null)
+            {
+                _context.Students.Remove(student);
+                _context.SaveChanges();
+                Console.WriteLine("Student deleted successfully");
+            }
+            else
+            {
+                Console.WriteLine("Student not found");
+            }
+        }
+
+        public void DeleteAllStudents()
+        {
+            _context.Students.RemoveRange(_context.Students);
+            _context.SaveChanges();
+            Console.WriteLine("All students deleted successfully");
+        }
 
     }
 }

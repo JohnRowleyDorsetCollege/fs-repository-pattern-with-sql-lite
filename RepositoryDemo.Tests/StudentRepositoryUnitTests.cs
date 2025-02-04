@@ -35,5 +35,17 @@ namespace RepositoryDemo.Tests
             Assert.Equal("John Doe", student.Name);
             Assert.Equal(25, student.Age);
         }
+
+        [Fact]
+        public void GetStudentById_ShouldReturnStudent()
+        {
+            _repository.Add("John Doe", 25);
+            var student = _repository.GetStudentById(1);
+            Assert.NotNull(student);
+            Assert.Equal("John Doe", student.Name);
+            Assert.Equal(25, student.Age);
+        }
+
+       
     }
 }
