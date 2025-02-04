@@ -26,6 +26,19 @@ namespace RepositoryDemo.Domain
             Console.WriteLine($"Added: {student.Name}, Age: {student.Age}");
         }
 
+        public void Add(Student student)
+        {
+           
+            _context.Students.Add(student);
+            _context.SaveChanges();
+            Console.WriteLine($"Added: {student.Name}, Age: {student.Age}");
+        }
+
+        public IEnumerable<Student> GetAll()
+        {
+            return _context.Students.ToList();
+        }
+
 
     }
 }

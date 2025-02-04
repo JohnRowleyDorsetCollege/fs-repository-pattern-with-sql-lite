@@ -15,9 +15,18 @@ var options = new DbContextOptionsBuilder<AppDbContext>()
 using var context = new AppDbContext(options);
 var repo = new StudentRepository(context);
 
-//var student1= new Student { Name = "John", Age = 22 };  
-//var student2 = new Student { Name = "Jane", Age = 23 };
-
+var student1 = new Student { Name = "Bruce", Age = 45 };
+var student2 = new Student { Name = "Michael", Age =54 };
+repo.Add(student1);
+repo.Add(student2);
 repo.Add( "John", 22);
 repo.Add("Jane", 23);
 
+
+
+var students = repo.GetAll();
+
+foreach(var student in students)
+{
+    Console.WriteLine($"Name: {student.Name}, Age: {student.Age}");
+}   
